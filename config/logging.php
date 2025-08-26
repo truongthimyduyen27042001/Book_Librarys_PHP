@@ -127,6 +127,21 @@ return [
             'path' => storage_path('logs/laravel.log'),
         ],
 
+        // Thêm channel debug riêng
+        'debug' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/debug.log'),
+            'level' => 'debug',
+            'replace_placeholders' => true,
+        ],
+
+        'api' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/api.log'),
+            'level' => 'debug',
+            'replace_placeholders' => true,
+        ],
+
     ],
 
 ];

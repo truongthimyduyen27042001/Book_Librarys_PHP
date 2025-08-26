@@ -3,7 +3,10 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BookController;
-
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\MessageController;
+use Illuminate\Support\Str;
+use App\Events\MessageSent;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -15,9 +18,21 @@ use App\Http\Controllers\BookController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware('api.auth')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// Book API Routes
-Route::apiResource('books', BookController::class);
+// Public routes
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/forgot-password', [PasswordResetController::class, 'forgotPassword']);
+Route::post('/reset-password', [PasswordResetController::class, 'resetPassword']);
+
+// Protected routes
+Route::middleware('api.auth')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/user', [AuthController::class, 'user']);
+    
+    // Books API (protected)
+    Route::apiResource('books', BookController::class);
+});
